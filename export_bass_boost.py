@@ -1,13 +1,10 @@
 from pydub import AudioSegment
-import numpy as np
-import math
 
 def export_audio_mega(file_path):
     # Load the input audio sample
     sample = AudioSegment.from_file(f"downloads/{file_path}.wav")
-    sample_track = np.array(sample.get_array_of_samples())
     
-    boosted_sample = sample_track.low_pass_filter(400)
+    boosted_sample = sample.low_pass_filter(400)
 
     # Adjust volume and overlay boosted track
     adjusted_sample = sample - 8
