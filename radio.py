@@ -52,6 +52,3 @@ async def play_radio(ctx, vc, station, station_names):
         russian_stations = ['http://live.ruradio.md:8000/ruradio']
         russian_link = random.choice(russian_stations)
         await ctx.send(f'Radio mode. Russian. Source: {russian_stations.index(russian_link)+1}. {russian_link}') and vc.play(discord.FFmpegPCMAudio(russian_link))
-
-
-# ctx.voice_client.play(discord.FFmpegPCMAudio(source='downloads/howdy.wav')) if joined_now else None
