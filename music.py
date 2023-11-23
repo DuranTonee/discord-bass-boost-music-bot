@@ -6,7 +6,7 @@ import os
 import asyncio
 import random
 from youtube_search import YoutubeSearch
-from export_audio import export_audio_mega
+from export_audio import export_bass_boost, export_8d
 from spotify import get_track_name_spotify, get_track_names_from_list_spotify
 from radio import play_radio
 
@@ -68,7 +68,7 @@ class music(commands.Cog):
                 video_title = video_title.replace(symbol, "")
             await asyncio.to_thread(audio.download, output_path="downloads/", filename=f"{video_title}.wav")
 
-            await asyncio.to_thread(export_audio_mega, video_title)
+            await asyncio.to_thread(export_bass_boost, video_title)
 
             vc.play(discord.FFmpegPCMAudio(source=f'downloads/{video_title}.wav'))
             await asyncio.sleep(2)
@@ -117,7 +117,7 @@ class music(commands.Cog):
                     video_title = video_title.replace(symbol, "")
                 await asyncio.to_thread(audio.download, output_path="downloads/", filename=f"{video_title}.wav")
 
-                await asyncio.to_thread(export_audio_mega, video_title)
+                await asyncio.to_thread(export_bass_boost, video_title)
 
                 vc.play(discord.FFmpegPCMAudio(source=f'downloads/{video_title}.wav'))
                 await asyncio.sleep(2)
@@ -129,6 +129,45 @@ class music(commands.Cog):
                     break
             else:
                 await ctx.send('Pick a video shorter than 2 hours')
+    
+    @commands.command(name='8d')
+    async def play_8d(self, ctx, url):
+        joined_now = await self.joined(ctx)
+        
+        ctx.voice_client.stop()
+        vc = ctx.voice_client
+
+        ctx.voice_client.play(discord.FFmpegPCMAudio(source='howdy.wav')) if joined_now else None
+
+        if url.startswith("https://open.spotify.com/track/") is True:
+            #search = YoutubeSearch(get_track_name_spotify(url), max_results=1).to_dict()
+            search = (await asyncio.to_thread(YoutubeSearch, get_track_name_spotify(url), max_results=1)).to_dict()
+            url = f"https://www.youtube.com/watch?v={search[0]['id']}"
+
+        elif url.startswith("https://www.youtube.com/watch?") is False:
+            search = (await asyncio.to_thread(YoutubeSearch, url, max_results=1)).to_dict()
+            url = f"https://www.youtube.com/watch?v={search[0]['id']}"
+        
+        repl = ["/", "\\", ":", "*", "?", "<", ">", "|", '"']
+        yt = await asyncio.to_thread(YouTube, url)
+        
+        if yt.length < 7201:
+            audio = yt.streams.filter(only_audio=True).first()
+            video_title = yt.title
+
+            await ctx.send(video_title)
+
+            for symbol in repl:
+                video_title = video_title.replace(symbol, "")
+            await asyncio.to_thread(audio.download, output_path="downloads/", filename=f"{video_title}.wav")
+
+            await asyncio.to_thread(export_8d, video_title)
+
+            vc.play(discord.FFmpegPCMAudio(source=f'downloads/{video_title}.wav'))
+            await asyncio.sleep(2)
+            os.remove(f'downloads/{video_title}.wav')
+        else:
+            await ctx.send('Pick a video shorter than 2 hours')
 
     @commands.command(name='radio')
     async def radio(self, ctx, station=None):
