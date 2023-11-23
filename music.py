@@ -9,7 +9,7 @@ import os
 import asyncio
 import random
 from youtube_search import YoutubeSearch
-from export_bass_boost_mega import export_audio_mega
+from export_bass_boost import export_audio_mega
 from spotify import get_track_name_spotify, get_track_names_from_list_spotify
 from radio import play_radio
 
