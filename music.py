@@ -14,19 +14,15 @@ class music(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    async def joined(self, ctx) -> bool or None:
+    async def join(self, ctx):
         if ctx.author.voice is None:
             await ctx.send("Join a voice channel first.")
         voice_channel = ctx.author.voice.channel
-
-        voice = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
         
         if ctx.voice_client is None:
             await voice_channel.connect()
-            return True if voice == None else False
         else:
             await ctx.voice_client.move_to(voice_channel)
-            return True if voice == None else False
             
     @commands.command(name="stop", aliases=['STOP','ыещз', 'ЫЕЩЗ'])
     async def stop(self, ctx):
@@ -39,12 +35,10 @@ class music(commands.Cog):
 
     @commands.command(name='play', aliases=['PLAY','здфн', 'ЗДФН'], description='play mega bass boost')
     async def play_mega(self, ctx, *, url):
-        joined_now = await self.joined(ctx)
+        await self.join(ctx)
         
         ctx.voice_client.stop()
         vc = ctx.voice_client
-
-        ctx.voice_client.play(discord.FFmpegPCMAudio(source='howdy.wav')) if joined_now else None
 
         if url.startswith("https://open.spotify.com/track/") is True:
             #search = YoutubeSearch(get_track_name_spotify(url), max_results=1).to_dict()
@@ -82,12 +76,10 @@ class music(commands.Cog):
             await ctx.send("syntax: playlist <link> (you can add r after the link to play in a random order: playlist <link> r)")
             return
         
-        joined_now = await self.joined(ctx)
+        await self.join(ctx)
 
         ctx.voice_client.stop()
         vc = ctx.voice_client
-
-        ctx.voice_client.play(discord.FFmpegPCMAudio(source='howdy.wav')) if joined_now else None
 
         if 'https://www.youtube.com/playlist?' in url:
             playlist = list(Playlist(url))
@@ -137,13 +129,10 @@ class music(commands.Cog):
             await ctx.send(', '.join(station_names))
             return
         else:
-            joined_now = await self.joined(ctx)
+            await self.join(ctx)
 
             ctx.voice_client.stop()
             vc = ctx.voice_client
-
-            ctx.voice_client.play(discord.FFmpegPCMAudio(source='howdy.wav')) if joined_now else None
-            await asyncio.sleep(2) if joined_now else None
 
             await play_radio(ctx, vc, station, station_names)
             
