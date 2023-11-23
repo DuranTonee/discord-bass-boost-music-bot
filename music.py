@@ -75,8 +75,8 @@ class music(commands.Cog):
                 await asyncio.to_thread(export_audio_mega, video_title)
 
                 vc.play(discord.FFmpegPCMAudio(source=f'downloads/{video_title}.wav'))
-                await asyncio.sleep(2)
-                os.remove(f'downloads/{video_title}.wav')
+                # await asyncio.sleep(2)
+                # os.remove(f'downloads/{video_title}.wav')
             else:
                 await ctx.send('Pick a video shorter than 2 hours (илья лох)')
         except Exception as ex:
