@@ -90,7 +90,6 @@ class music(commands.Cog):
         if rand == 'r':
             random.shuffle(playlist)
         
-        await ctx.send(f"{type(playlist)}, {playlist}")
         for url in playlist:
             repl = ["/", "\\", ":", "*", "?", "<", ">", "|", '"']
             yt = YouTube(url=url)
