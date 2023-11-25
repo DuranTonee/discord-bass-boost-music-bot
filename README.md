@@ -35,6 +35,7 @@ This project is a Discord bot designed to enhance your audio experience by playi
 # How some parts work
 ## Spotify (spotify.py)
 Of course it doesn't download directly from Spotify. The bot parses data (track name and author) using [Spotify for Developers](https://developer.spotify.com/) and then searches YouTube via [youtube-search](https://pypi.org/project/youtube-search/)
+
 ![image](https://github.com/DuranTonee/discord-bass-boost-music-bot/assets/95922080/37f9e0ed-c511-4ffc-a722-e3258818b63a)
 
 Supports playlists:
