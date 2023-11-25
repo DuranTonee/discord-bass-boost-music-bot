@@ -1,7 +1,11 @@
 import discord
 from discord.ext import commands
-from config import BOT_TOKEN
+from dotenv import load_dotenv
+import os
 from music import music  # Import the Music cog
+
+load_dotenv()
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 intents = discord.Intents.default()
 intents.typing = False

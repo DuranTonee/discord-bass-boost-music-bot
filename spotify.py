@@ -2,9 +2,14 @@ import base64
 import json
 import requests
 from youtube_search import YoutubeSearch
-from config import CLIENT_ID, CLIENT_SECRET
+from dotenv import load_dotenv
+import os
 
 def get_token():
+    load_dotenv()
+    CLIENT_ID = os.getenv('CLIENT_ID')
+    CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+
     auth_string = f"{CLIENT_ID}:{CLIENT_SECRET}"
     auth_bytes = auth_string.encode(encoding="utf-8")
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
@@ -38,10 +43,8 @@ def get_track_name_spotify(track_url) -> str:
 
 
 def get_track_names_from_list_spotify(playlist_url) -> list:
-    print('spotify playlist')
     token = get_token()
     auth_header = get_auth_header(token=token)
-    print('spotify playlist again')
     playlist = []
     # get the playlist json using endpoint (from docs) and request
     playlist_id = playlist_url[34:]
